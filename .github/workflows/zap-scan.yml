@@ -20,6 +20,12 @@ on:
           - staging
           - production
 
+# Add permissions block
+permissions:
+  contents: read
+  issues: write
+  security-events: write
+
 env:
   SCAN_TIMEOUT: 30m
   ZAP_ALERT_LEVEL: Medium
