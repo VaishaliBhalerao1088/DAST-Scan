@@ -96,7 +96,6 @@ jobs:
 
       - name: Upload DAST Results
         uses: actions/upload-artifact@v3
-        if: always()
         with:
           name: dast-results
           path: |
