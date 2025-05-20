@@ -1,0 +1,41 @@
+name: OWASP ZAP DAST Scan
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: OWASP ZAP Full Scan
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies and build project
+        run: |
+          cd frontend
+          npm install
+          npm run build
+
+      - name: Start Node.js server (background)
+        run: |
+          cd backend
+          npm install
+          npm start &
+          sleep 10
+
+      - name: Run OWASP ZAP Scan
+        uses: zaproxy/action-full-scan@v0.8.0
+        with:
+          target: 'http://localhost:3000'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          allow_issue_writing: false
