@@ -49,7 +49,7 @@ jobs:
           args: --severity-threshold=high --json-file-output=snyk-results.json
 
       - name: Upload SCA Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: sca-results
@@ -95,7 +95,7 @@ jobs:
           failure_on_informational: false
 
       - name: Upload DAST Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dast-results
           path: |
@@ -143,7 +143,7 @@ jobs:
         run: echo "test" > dummy.txt
 
       - name: Upload Dummy Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-artifact
           path: dummy.txt
