@@ -85,7 +85,7 @@ jobs:
       - name: Upload DAST Results
         uses: actions/upload-artifact@v4
         with:
-          name: zap-scan
+          name: zap-scan           # <-- fixed here
           path: |
             zap-report.html
             zap-report.json
@@ -112,7 +112,7 @@ jobs:
           script: |
             const { repo, owner } = context.repo;
             const run_id = context.runId;
-            
+
             await github.rest.issues.create({
               owner,
               repo,
