@@ -44,7 +44,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
 
       # SCA Scanning
       - name: Run SCA Scan
@@ -63,13 +62,13 @@ jobs:
           retention-days: 30
 
       # Build and Deploy to Test Environment
-      - name: Install dependencies and build project
+      - name: Install frontend dependencies and build project
         run: |
           cd frontend
           npm ci
           npm run build
 
-      - name: Start Node.js server (background)
+      - name: Install backend dependencies and start server
         run: |
           cd backend
           npm ci
