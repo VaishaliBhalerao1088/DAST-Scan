@@ -46,19 +46,30 @@ jobs:
           node-version: '18'
 
       # SCA Scanning
-      - name: Run SCA Scan
+      - name: Run SCA Scan for Frontend
         uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high --json-file-output=snyk-results.json
+          args: --severity-threshold=high --json-file-output=frontend-snyk-results.json
+          path: ./frontend
+
+      - name: Run SCA Scan for Backend
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --json-file-output=backend-snyk-results.json
+          path: ./backend
 
       - name: Upload SCA Results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: sca-results
-          path: snyk-results.json
+          path: |
+            frontend-snyk-results.json
+            backend-snyk-results.json
           retention-days: 30
 
       # Build and Deploy to Test Environment
@@ -115,7 +126,7 @@ jobs:
         run: |
           echo "## Security Scan Results" >> $GITHUB_STEP_SUMMARY
           echo "### SCA Scan" >> $GITHUB_STEP_SUMMARY
-          if [ -f snyk-results.json ]; then
+          if [ -f frontend-snyk-results.json ] && [ -f backend-snyk-results.json ]; then
             echo "SCA scan completed. Check artifacts for details." >> $GITHUB_STEP_SUMMARY
           else
             echo "SCA scan failed to generate report." >> $GITHUB_STEP_SUMMARY
