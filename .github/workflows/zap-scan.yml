@@ -86,7 +86,7 @@ jobs:
       - name: Upload DAST Results
         uses: actions/upload-artifact@v4
         with:
-          name: dast-results
+          name: zap_scan
           path: |
             zap-report.html
             zap-report.json
