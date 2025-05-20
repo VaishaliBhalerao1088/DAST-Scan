@@ -47,20 +47,18 @@ jobs:
 
       # SCA Scanning
       - name: Run SCA Scan for Frontend
-        uses: snyk/actions/node@master
+        run: |
+          cd frontend
+          npx snyk test --severity-threshold=high --json-file-output=../frontend-snyk-results.json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high --json-file-output=frontend-snyk-results.json
-          path: ./frontend
 
       - name: Run SCA Scan for Backend
-        uses: snyk/actions/node@master
+        run: |
+          cd backend
+          npx snyk test --severity-threshold=high --json-file-output=../backend-snyk-results.json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high --json-file-output=backend-snyk-results.json
-          path: ./backend
 
       - name: Upload SCA Results
         uses: actions/upload-artifact@v4
