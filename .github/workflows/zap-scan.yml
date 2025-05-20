@@ -46,7 +46,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high
+          args: --severity-threshold=high --json-file-output=snyk-results.json
 
       - name: Upload SCA Results
         uses: actions/upload-artifact@v3
@@ -137,13 +137,4 @@ jobs:
               repo,
               title: `🚨 Security Scan Failed - Run #${run_id}`,
               body: `Security scan failed in ${context.workflow} workflow. Please check the [workflow run](${context.serverUrl}/${owner}/${repo}/actions/runs/${run_id}) for details.`
-            });
-
-      - name: Create dummy file
-        run: echo "test" > dummy.txt
-
-      - name: Upload Dummy Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-artifact
-          path: dummy.txt
+            })
