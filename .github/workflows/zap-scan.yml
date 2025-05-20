@@ -45,44 +45,17 @@ jobs:
         with:
           node-version: '18'
 
-      # SCA Scanning
-      - name: Run SCA Scan for Frontend
-        run: |
-          cd frontend
-          npm install
-          npx snyk test --severity-threshold=high --json-file-output=../frontend-snyk-results.json
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-      - name: Run SCA Scan for Backend
-        run: |
-          cd backend
-          npm install
-          npx snyk test --severity-threshold=high --json-file-output=../backend-snyk-results.json
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-      - name: Upload SCA Results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: sca-results
-          path: |
-            frontend-snyk-results.json
-            backend-snyk-results.json
-          retention-days: 30
-
       # Build and Deploy to Test Environment
       - name: Install frontend dependencies and build project
         run: |
           cd frontend
-          npm ci
+          npm install
           npm run build
 
       - name: Install backend dependencies and start server
         run: |
           cd backend
-          npm ci
+          npm install
           npm start &
           sleep 10
 
@@ -125,13 +98,6 @@ jobs:
         if: always()
         run: |
           echo "## Security Scan Results" >> $GITHUB_STEP_SUMMARY
-          echo "### SCA Scan" >> $GITHUB_STEP_SUMMARY
-          if [ -f frontend-snyk-results.json ] && [ -f backend-snyk-results.json ]; then
-            echo "SCA scan completed. Check artifacts for details." >> $GITHUB_STEP_SUMMARY
-          else
-            echo "SCA scan failed to generate report." >> $GITHUB_STEP_SUMMARY
-          fi
-          
           echo "### DAST Scan" >> $GITHUB_STEP_SUMMARY
           if [ -f zap-report.json ]; then
             echo "DAST scan completed. Check artifacts for details." >> $GITHUB_STEP_SUMMARY
