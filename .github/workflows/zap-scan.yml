@@ -49,6 +49,7 @@ jobs:
       - name: Run SCA Scan for Frontend
         run: |
           cd frontend
+          npm install
           npx snyk test --severity-threshold=high --json-file-output=../frontend-snyk-results.json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -56,6 +57,7 @@ jobs:
       - name: Run SCA Scan for Backend
         run: |
           cd backend
+          npm install
           npx snyk test --severity-threshold=high --json-file-output=../backend-snyk-results.json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
