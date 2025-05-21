@@ -82,14 +82,36 @@ jobs:
           failure_on_low: false
           failure_on_informational: false
 
-      - name: Upload DAST Results
+      - name: Verify Files Exist
+        run: |
+          ls -la
+          echo "Checking for report files..."
+          [ -f zap-report.html ] && echo "HTML report exists" || echo "HTML report missing"
+          [ -f zap-report.json ] && echo "JSON report exists" || echo "JSON report missing"
+          [ -f zap-report.md ] && echo "MD report exists" || echo "MD report missing"
+
+      - name: Upload HTML Report
         uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: zap-scan
-          path: |
-            zap-report.html
-            zap-report.json
-            zap-report.md
+          name: zap-html-report
+          path: zap-report.html
+          retention-days: 30
+
+      - name: Upload JSON Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-json-report
+          path: zap-report.json
+          retention-days: 30
+
+      - name: Upload MD Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-md-report
+          path: zap-report.md
           retention-days: 30
 
       # Security Report Generation
