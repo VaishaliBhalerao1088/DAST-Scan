@@ -13,7 +13,7 @@ permissions:
 
 
 jobs:
-  zap_scan:
+  zap-scan:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -49,12 +49,14 @@ jobs:
         with:
           target: 'http://localhost:3000'
           cmd_options: '-a'
+          allow_issue_writing: 'false'
 
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
           path: |
-            zap_scan.md
-            zap_scan.html
-            zap_scan.xml
+            zap-scan.md
+            zap-scan.html
+            zap-scan.xml
+
