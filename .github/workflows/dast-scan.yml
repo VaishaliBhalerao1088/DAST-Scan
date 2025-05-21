@@ -11,27 +11,20 @@ permissions:
   actions: read
 
 jobs:
-  start-app:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          
-      - name: Start Target App
-        run: |
-          cd app
-          npm install
-          node server.js &
-          sleep 15
-
   zap_scan:
-    needs: start-app
     runs-on: ubuntu-latest
+    services:
+      app:
+        image: node:18
+        ports:
+          - 3000:3000
+        volumes:
+          - ${{ github.workspace }}/app:/app
+        working-directory: /app
+        run: |
+          npm install
+          node server.js
+
     container:
       image: ghcr.io/zaproxy/zaproxy:stable
       options: --user root -v ${{ github.workspace }}:/zap/wrk
@@ -40,16 +33,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
           
+      - name: Wait for app to start
+        run: |
+          sleep 15
+          
       - name: OWASP ZAP Baseline Scan
         run: |
           cd /zap/wrk
-          zap-baseline.py -t http://localhost:3000 -g gen.conf -r zap_scan.md -J zap_scan.json
+          zap-baseline.py -t http://app:3000 -g gen.conf -r zap_scan.md -J zap_scan.json
           
       - name: OWASP ZAP Full Scan
         if: github.event_name == 'workflow_dispatch'
         run: |
           cd /zap/wrk
-          zap-full-scan.py -t http://localhost:3000 -g gen.conf -r zap_scan.md -J zap_scan.json
+          zap-full-scan.py -t http://app:3000 -g gen.conf -r zap_scan.md -J zap_scan.json
           
       - name: Upload Reports
         uses: actions/upload-artifact@v4
