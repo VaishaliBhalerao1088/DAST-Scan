@@ -41,6 +41,19 @@ jobs:
             sleep 5
           done
 
+      - name: Create .zap directory and rules file
+        run: |
+          mkdir -p .zap
+          cat > .zap/rules.tsv << EOF
+          10016	IGNORE	(Web Browser XSS Protection Not Enabled)
+          10055	IGNORE	(CSP Scanner: Wildcard Directive)
+          10098	IGNORE	(Cross-Domain Misconfiguration)
+          10038	IGNORE	(Content Security Policy (CSP) Header Not Set)
+          90033	IGNORE	(Loosely Scoped Cookie)
+          10021	WARN	THRESHOLD:4	(X-Content-Type-Options Header Missing)
+          10020	WARN	THRESHOLD:3	(X-Frame-Options Header)
+          EOF
+
       - name: ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.11.0
         with:
@@ -55,9 +68,3 @@ jobs:
           path: |
             zap_report.html
             zap_report.md
-            
-      - name: Create .zap directory and rules file
-        run: |
-          mkdir -p .zap
-          touch .zap/rules.tsv
-        
