@@ -9,6 +9,8 @@ permissions:
   contents: read
   security-events: write
   actions: read
+  issues: write
+
 
 jobs:
   zap_scan:
