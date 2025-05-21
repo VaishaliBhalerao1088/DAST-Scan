@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/zaproxy/zaproxy:stable
-      options: --user root
+      options: --user root -v ${{ github.workspace }}:/zap/wrk
     
     steps:
       - name: Checkout
@@ -42,11 +42,13 @@ jobs:
           
       - name: OWASP ZAP Baseline Scan
         run: |
+          cd /zap/wrk
           zap-baseline.py -t http://localhost:3000 -g gen.conf -r zap_scan.md -J zap_scan.json
           
       - name: OWASP ZAP Full Scan
         if: github.event_name == 'workflow_dispatch'
         run: |
+          cd /zap/wrk
           zap-full-scan.py -t http://localhost:3000 -g gen.conf -r zap_scan.md -J zap_scan.json
           
       - name: Upload Reports
