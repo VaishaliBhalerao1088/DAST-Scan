@@ -13,6 +13,9 @@ permissions:
 jobs:
   zap_scan:
     runs-on: ubuntu-latest
+    container:
+      image: owasp/zap2docker-stable
+      options: --user root
     
     steps:
       - name: Checkout
