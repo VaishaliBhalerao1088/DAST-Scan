@@ -29,7 +29,7 @@ jobs:
       - name: Copy ZAP Report
         run: |
           mkdir -p zap-output
-          docker cp $(docker ps -aqf "ancestor=owasp/zap2docker-stable"):/zap/wrk/zap_report.html zap-output/
+          docker cp $(docker ps -aqf "ancestor=ghcr.io/zaproxy/zap-full-scan"):/zap/wrk/zap_report.html zap-output/
 
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4

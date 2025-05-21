@@ -9,16 +9,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - zapnet
 
   zap:
-    image: owasp/zap2docker-stable
+    image: ghcr.io/zaproxy/zap-full-scan
     depends_on:
       app:
         condition: service_healthy
     command: >
-      zap-full-scan.py
-      -t http://app:3000
-      -r zap_report.html
+      -t http://app:3000 -r zap_report.html
     networks:
       - zapnet
 
