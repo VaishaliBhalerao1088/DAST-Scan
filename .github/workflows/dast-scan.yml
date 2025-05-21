@@ -75,7 +75,7 @@ jobs:
             --network=host \
             -v "$(pwd)/.zap:/zap/wrk/.zap:rw" \
             -v "$(pwd)/reports:/zap/wrk/reports:rw" \
-            zap2docker-weekly \
+            ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py \
             -t http://localhost:3000 \
             -c /zap/wrk/.zap/rules.tsv \
