@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<policies>
+  <scanner>
+    <policy name="API-Scan" enabled="true">
+      <scannerlevel>HIGH</scannerlevel>
+    </policy>
+</policies>

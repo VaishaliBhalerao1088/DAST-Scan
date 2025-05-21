@@ -1,0 +1,5 @@
+# ZAP Rule Configuration
+10010	WARN	# XSS
+10015	WARN	# Insecure HTTP Methods
+10021	WARN	# Missing Security Headers
+10023	WARN	# Clickjacking
