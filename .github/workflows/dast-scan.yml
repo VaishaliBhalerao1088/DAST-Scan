@@ -13,47 +13,26 @@ permissions:
 jobs:
   zap_scan:
     runs-on: ubuntu-latest
-    services:
-      app:
-        image: node:18
-        ports:
-          - 3000:3000
-        volumes:
-          - ${{ github.workspace }}/app:/app
-        env:
-          NODE_ENV: development
-        options: >-
-          --workdir /app
-          --entrypoint /bin/bash
-          -c "npm install && node server.js"
+    timeout-minutes: 20
 
-    container:
-      image: ghcr.io/zaproxy/zaproxy:stable
-      options: --user root -v ${{ github.workspace }}:/zap/wrk
-    
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
-          
-      - name: Wait for app to start
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Run Docker Compose
         run: |
-          sleep 15
-          
-      - name: OWASP ZAP Baseline Scan
+          docker compose up --build --abort-on-container-exit
+
+      - name: Copy ZAP Report
         run: |
-          cd /zap/wrk
-          zap-baseline.py -t http://app:3000 -g gen.conf -r zap_scan.md -J zap_scan.json
-          
-      - name: OWASP ZAP Full Scan
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          cd /zap/wrk
-          zap-full-scan.py -t http://app:3000 -g gen.conf -r zap_scan.md -J zap_scan.json
-          
-      - name: Upload Reports
+          mkdir -p zap-output
+          docker cp $(docker ps -aqf "ancestor=owasp/zap2docker-stable"):/zap/wrk/zap_report.html zap-output/
+
+      - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
         with:
-          name: zap-reports
-          path: |
-            zap_scan.md
-            zap_scan.json
+          name: zap-report
+          path: zap-output/zap_report.html

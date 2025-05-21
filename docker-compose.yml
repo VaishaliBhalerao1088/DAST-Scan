@@ -1,0 +1,26 @@
+version: '3'
+services:
+  app:
+    build: ./app
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  zap:
+    image: owasp/zap2docker-stable
+    depends_on:
+      app:
+        condition: service_healthy
+    command: >
+      zap-full-scan.py
+      -t http://app:3000
+      -r zap_report.html
+    networks:
+      - zapnet
+
+networks:
+  zapnet:
