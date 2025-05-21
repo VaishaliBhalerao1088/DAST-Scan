@@ -94,7 +94,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: zapreport1
+          name: zap-html-report
           path: zap-report.html
           retention-days: 30
 
@@ -102,7 +102,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: zapreport2
+          name: zap-json-report
           path: zap-report.json
           retention-days: 30
 
@@ -110,7 +110,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: zapreport3
+          name: zap-md-report
           path: zap-report.md
           retention-days: 30
 
@@ -122,8 +122,9 @@ jobs:
           echo "### DAST Scan" >> $GITHUB_STEP_SUMMARY
           if [ -f zap-report.json ]; then
             echo "DAST scan completed. Check artifacts for details." >> $GITHUB_STEP_SUMMARY
+            echo "📊 [HTML Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
           else
-            echo "DAST scan failed to generate report." >> $GITHUB_STEP_SUMMARY
+            echo "❌ DAST scan failed to generate report." >> $GITHUB_STEP_SUMMARY
           fi
 
       # Notify on Critical Issues
@@ -139,14 +140,6 @@ jobs:
               owner,
               repo,
               title: `🚨 Security Scan Failed - Run #${run_id}`,
-              body: `Security scan failed in ${context.workflow} workflow. Please check the [workflow run](${context.serverUrl}/${owner}/${repo}/actions/runs/${run_id}) for details.`
+              body: `Security scan failed in ${context.workflow} workflow. Please check the [workflow run](https://github.com/${owner}/${repo}/actions/runs/${run_id}) for details.`,
+              labels: ['security']
             })
-
-      - name: Create dummy file
-        run: echo "test" > dummy.txt
-
-      - name: Upload Dummy Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: testartifact
-          path: dummy.txt
