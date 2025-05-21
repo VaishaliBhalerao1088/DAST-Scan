@@ -94,7 +94,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: zap-html-report
+          name: zapreport1
           path: zap-report.html
           retention-days: 30
 
@@ -102,7 +102,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: zap-json-report
+          name: zapreport2
           path: zap-report.json
           retention-days: 30
 
@@ -110,7 +110,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: zap-md-report
+          name: zapreport3
           path: zap-report.md
           retention-days: 30
 
