@@ -20,10 +20,12 @@ jobs:
           - 3000:3000
         volumes:
           - ${{ github.workspace }}/app:/app
-        working-directory: /app
-        run: |
-          npm install
-          node server.js
+        env:
+          NODE_ENV: development
+        options: >-
+          --workdir /app
+          --entrypoint /bin/bash
+          -c "npm install && node server.js"
 
     container:
       image: ghcr.io/zaproxy/zaproxy:stable
