@@ -1,4 +1,4 @@
-name: Manual ZAP Scan (No Docker, No Action)
+name: ZAP Baseline Scan
 
 on:
   push:
@@ -41,21 +41,23 @@ jobs:
             sleep 5
           done
 
-      - name: Install ZAP CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y openjdk-11-jre-headless wget tar
-          wget https://github.com/zaproxy/zaproxy/releases/download/v2.13.0/ZAP_2.13.0_Linux.tar.gz -O zap.tar.gz
-          mkdir zap
-          tar -xzf zap.tar.gz -C zap --strip-components=1
-
-      - name: Run ZAP Scan
-        run: |
-          mkdir zap-report
-          ./zap/zap.sh -cmd -quickurl http://localhost:3000 -quickout zap-report/report.html -quickprogress
-
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.11.0
+        with:
+          target: 'http://localhost:3000'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
+          
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
         with:
           name: zap_report
-          path: zap-report/report.html
+          path: |
+            zap_report.html
+            zap_report.md
+            
+      - name: Create .zap directory and rules file
+        run: |
+          mkdir -p .zap
+          touch .zap/rules.tsv
+        
