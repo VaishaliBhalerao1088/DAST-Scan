@@ -11,7 +11,26 @@ permissions:
   actions: read
 
 jobs:
+  start-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Start Target App
+        run: |
+          cd app
+          npm install
+          node server.js &
+          sleep 15
+
   zap_scan:
+    needs: start-app
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/zaproxy/zaproxy:stable
@@ -20,13 +39,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
-      - name: Start Target App
-        run: |
-          cd app
-          npm install
-          node server.js &
-          sleep 15
           
       - name: OWASP ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.10.0
