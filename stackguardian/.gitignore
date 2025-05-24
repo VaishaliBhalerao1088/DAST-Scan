@@ -187,6 +187,15 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
+# Docker
+.env
+docker-compose.override.yml # For local docker-compose overrides
+# If you store .env files with secrets, ensure they are gitignored.
+# .env.local
+# .env.development
+# .env.production
+# etc.
+
 # StackGuardian specific
 sql_app.db
 celerybeat-schedule

@@ -7,6 +7,11 @@ from .active_scan import (
     ActiveScanResultItem,
     ActiveScanReport,
 )
+from .report import (
+    ReportScanRun,
+    ReportVulnerabilityFinding,
+    VulnerabilitySummary
+)
 
 __all__ = [
     "User",
@@ -20,4 +25,7 @@ __all__ = [
     "NucleiScanConfig",
     "ActiveScanResultItem",
     "ActiveScanReport",
+    "ReportScanRun",
+    "ReportVulnerabilityFinding",
+    "VulnerabilitySummary",
 ]
