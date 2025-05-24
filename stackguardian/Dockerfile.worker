@@ -1,0 +1,40 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Install system dependencies needed by worker or its tasks
+# (e.g., if ZAP or Nuclei were to be installed inside the container)
+# For now, assumes ZAP/Nuclei are external or will be added later.
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     # Example: git, curl, etc. for tool installation \
+#     && rm -rf /var/lib/apt/lists/*
+
+# Install OS-level dependencies for ZAP and Nuclei if they are to be run from within this container
+# This makes the worker self-contained but increases image size.
+# Example for Nuclei (adjust for actual installation method):
+# RUN apt-get update && apt-get install -y --no-install-recommends wget unzip ca-certificates && \
+#     wget https://github.com/projectdiscovery/nuclei/releases/download/v2.9.3/nuclei_2.9.3_linux_amd64.zip && \
+#     unzip nuclei_2.9.3_linux_amd64.zip && \
+#     mv nuclei /usr/local/bin/nuclei && \
+#     rm nuclei_2.9.3_linux_amd64.zip && \
+#     nuclei -update-templates # Update templates during build
+# (Similar steps for ZAP if not using a separate ZAP container, e.g. installing zap-baseline.py)
+# If zap-baseline.py is used, it often requires python3 and pip itself, which are already here.
+# It might also need ZAP to be installed or accessible.
+
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Command to run the Celery worker
+# Ensure stackguardian.stackguardian.tasks.celery_worker is correct
+# The -P solo is for SQLite, generally not needed for PostgreSQL/Redis in separate containers.
+# Remove -P solo if using PostgreSQL in docker-compose.
+CMD ["celery", "-A", "stackguardian.stackguardian.tasks.celery_worker", "worker", "-l", "info"]
+# Add "-P", "eventlet" or "gevent" for concurrency in production if I/O bound tasks are many.
+# Default is prefork (multiprocessing).

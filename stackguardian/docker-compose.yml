@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13-alpine # Or postgres:15
+    container_name: stackguardian_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=stackguardian
+      - POSTGRES_PASSWORD=secretpassword
+      - POSTGRES_DB=stackguardian_dev
+    ports:
+      - "5432:5432" # Expose only if needed externally, backend connects via docker network
+    networks:
+      - stackguardian_net
+
+  redis:
+    image: redis:6-alpine # Or redis:7
+    container_name: stackguardian_redis
+    ports:
+      - "6379:6379" # Expose only if needed, backend/worker connect via docker network
+    networks:
+      - stackguardian_net
+
+  # Optional: OWASP ZAP as a service (if not installing in worker)
+  # zap:
+  #   image: owasp/zap2docker-stable
+  #   container_name: stackguardian_zap
+  #   command: zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config api.key=${ZAP_API_KEY}
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - ZAP_API_KEY=${ZAP_API_KEY:-changemeapikey} # Set your ZAP API key
+  #   networks:
+  #     - stackguardian_net
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: stackguardian_backend
+    depends_on:
+      - db
+      - redis
+      # - zap # if ZAP service is defined
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app # Mount current directory for live reload during development
+    environment:
+      - DATABASE_URL=postgresql://stackguardian:secretpassword@db:5432/stackguardian_dev
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - SECRET_KEY=your_super_secret_key_for_dev_docker_compose # Change this!
+      - API_V1_STR=/api/v1 # Ensure this is set if your config relies on it
+      - PROJECT_NAME=StackGuardian # Ensure this is set if your config relies on it
+      # - ZAP_BASE_URL=http://zap:8080 # If ZAP service is used
+      # - ZAP_API_KEY=${ZAP_API_KEY:-changemeapikey}
+    networks:
+      - stackguardian_net
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: stackguardian_worker
+    depends_on:
+      - redis
+      - db # If worker needs DB access directly
+      # - zap # if ZAP service is used and worker calls it via http
+    volumes:
+      - .:/app # Mount for code changes if any part of task logic is being developed
+    environment:
+      - DATABASE_URL=postgresql://stackguardian:secretpassword@db:5432/stackguardian_dev
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - SECRET_KEY=your_super_secret_key_for_dev_docker_compose # Same as backend for consistency if needed
+      # If Nuclei/ZAP CLIs are installed in worker image and need config:
+      # - ZAP_BASE_URL=http://zap:8080 # If worker calls ZAP API
+      # - ZAP_API_KEY=${ZAP_API_KEY:-changemeapikey}
+    networks:
+      - stackguardian_net
+
+volumes:
+  postgres_data:
+
+networks:
+  stackguardian_net:
+    driver: bridge

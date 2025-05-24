@@ -1,0 +1,69 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env # Environment variables, potentially sensitive
+
+# Docker
+# These files are used to build the images, not needed inside.
+Dockerfile
+Dockerfile.backend
+Dockerfile.worker
+docker-compose.yml
+docker-compose.override.yml
+
+# Documentation
+docs/
+
+# Local databases and logs
+*.db
+*.sqlite3
+*.log
+celerybeat-schedule
+celerybeat.pid
+sql_app.db # From earlier dev
+
+# IDE / Editor specific
+.idea/
+.vscode/
+.project
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Coverage reports
+.coverage
+.coverage.*
+htmlcov/
+cover/
+
+# Test caches
+.pytest_cache/
+.tox/
+.nox/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+wheels/
+sdist/
+parts/
+var/
+downloads/
+eggs/
+.eggs/
+*.manifest
+*.spec
