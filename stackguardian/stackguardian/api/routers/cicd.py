@@ -1,20 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Body
 from celery.result import AsyncResult
 
-from stackguardian.stackguardian.models.user import User
-from stackguardian.stackguardian.api.deps import get_current_user
-from stackguardian.stackguardian.tasks.scan_tasks import (
+from stackguardian.models.user import User
+from stackguardian.api.deps import get_current_user
+from stackguardian.tasks.scan_tasks import (
     run_ssl_tls_scan_task, 
     run_http_headers_scan_task, 
     run_zap_scan_task, 
     run_nuclei_scan_task
 )
-from stackguardian.stackguardian.tasks.celery_worker import celery_app
-from stackguardian.stackguardian.schemas.task import TaskStatus # Base TaskStatus
-from stackguardian.stackguardian.schemas.scan import ScanTarget
-from stackguardian.stackguardian.schemas.active_scan import ZapScanConfig, NucleiScanConfig, ActiveScanReport
-from stackguardian.stackguardian.models.scan_results import ScanType, SeverityLevel
-from stackguardian.stackguardian.schemas.cicd import CICDScanTriggerRequest, CICDTaskStatus, CICDScanResultRequest
+from stackguardian.tasks.celery_worker import celery_app
+from stackguardian.schemas.task import TaskStatus # Base TaskStatus
+from stackguardian.schemas.scan import ScanTarget
+from stackguardian.schemas.active_scan import ZapScanConfig, NucleiScanConfig, ActiveScanReport
+from stackguardian.models.scan_results import ScanType, SeverityLevel
+from stackguardian.schemas.cicd import CICDScanTriggerRequest, CICDTaskStatus, CICDScanResultRequest
 
 router = APIRouter()
 

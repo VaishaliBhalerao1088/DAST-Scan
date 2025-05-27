@@ -3,15 +3,15 @@ import subprocess
 import traceback
 from celery import shared_task
 
-from stackguardian.stackguardian.services.passive_scan import get_ssl_tls_info, get_http_headers_info
-from stackguardian.stackguardian.schemas.scan import ScanTarget
-from stackguardian.stackguardian.schemas.active_scan import (
+from stackguardian.services.passive_scan import get_ssl_tls_info, get_http_headers_info
+from stackguardian.schemas.scan import ScanTarget
+from stackguardian.schemas.active_scan import (
     ZapScanConfig,
     NucleiScanConfig,
     ActiveScanReport,
     ActiveScanResultItem,
 )
-from stackguardian.stackguardian.core.config import settings
+from stackguardian.core.config import settings
 # from zapv2 import ZAPv2 # Would be used for direct ZAP API interaction
 
 

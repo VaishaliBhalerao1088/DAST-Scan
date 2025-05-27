@@ -1,6 +1,6 @@
 import enum
 from sqlalchemy import Column, Integer, String, Enum as SQLAlchemyEnum
-from stackguardian.stackguardian.core.database import Base
+from stackguardian.core.database import Base
 
 class UserRole(enum.Enum):
     ADMIN = "admin"

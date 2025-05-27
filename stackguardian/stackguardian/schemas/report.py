@@ -1,7 +1,7 @@
 from pydantic import BaseModel, HttpUrl
 from typing import List, Optional, Dict, Any
 from datetime import datetime
-from stackguardian.stackguardian.models.scan_results import SeverityLevel, ScanType, ScanStatus # Import enums
+from stackguardian.models.scan_results import SeverityLevel, ScanType, ScanStatus # Import enums
 
 # Schemas for ScanRun and VulnerabilityFinding for response consistency
 

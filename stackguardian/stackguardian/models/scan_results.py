@@ -1,10 +1,10 @@
 import enum
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Text, DateTime, JSON, Enum as SQLAlchemyEnum, ForeignKey
-from stackguardian.stackguardian.core.database import Base
+from stackguardian.core.database import Base
 # Import User if you decide to link ScanRun to users directly by ORM relationship,
 # for ForeignKey("users.id") as a string, direct import is not strictly necessary here.
-# from stackguardian.stackguardian.models.user import User 
+# from stackguardian.models.user import User 
 
 class ScanType(str, enum.Enum):
     SSL_TLS = "ssl_tls"

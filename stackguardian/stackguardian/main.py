@@ -5,7 +5,8 @@ from .api.routers import (
     passive_scans as passive_scan_router, 
     active_scans as active_scan_router,
     reports as reports_router,
-    cicd as cicd_router # Import the new CI/CD router
+    cicd as cicd_router, # Import the new CI/CD router
+    scan as scan_router # Import the new scan router
 )
 from .core.database import Base, engine
 # Ensure all models are imported so Base.metadata.create_all creates them
@@ -25,3 +26,4 @@ app.include_router(passive_scan_router.router, prefix=f"{settings.API_V1_STR}/pa
 app.include_router(active_scan_router.router, prefix=f"{settings.API_V1_STR}/active", tags=["active_scans"])
 app.include_router(reports_router.router, prefix=f"{settings.API_V1_STR}/reports", tags=["reports"])
 app.include_router(cicd_router.router, prefix=f"{settings.API_V1_STR}/cicd", tags=["cicd"]) # Include the CI/CD router
+app.include_router(scan_router.router, prefix=f"{settings.API_V1_STR}/scan", tags=["scan"]) # Include the scan router

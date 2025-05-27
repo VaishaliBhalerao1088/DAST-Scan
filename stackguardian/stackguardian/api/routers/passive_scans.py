@@ -2,14 +2,14 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from celery.result import AsyncResult
 
-from stackguardian.stackguardian.core.database import get_db
-from stackguardian.stackguardian.schemas.scan import ScanTarget
-from stackguardian.stackguardian.models.user import User
-from stackguardian.stackguardian.api.deps import get_current_user
-from stackguardian.stackguardian.tasks.scan_tasks import run_ssl_tls_scan_task, run_http_headers_scan_task
-from stackguardian.stackguardian.tasks.celery_worker import celery_app
+from stackguardian.core.database import get_db
+from stackguardian.schemas.scan import ScanTarget
+from stackguardian.models.user import User
+from stackguardian.api.deps import get_current_user
+from stackguardian.tasks.scan_tasks import run_ssl_tls_scan_task, run_http_headers_scan_task
+from stackguardian.tasks.celery_worker import celery_app
 # TaskStatus will be created in the next step, importing it here for now
-from stackguardian.stackguardian.schemas.task import TaskStatus
+from stackguardian.schemas.task import TaskStatus
 
 router = APIRouter()
 

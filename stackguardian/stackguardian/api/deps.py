@@ -3,10 +3,10 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 
-from stackguardian.stackguardian.schemas.user import TokenData
-from stackguardian.stackguardian.models.user import User
-from stackguardian.stackguardian.core.config import settings
-from stackguardian.stackguardian.core.database import get_db, SessionLocal # Assuming get_db will be in database.py
+from stackguardian.schemas.user import TokenData
+from stackguardian.models.user import User
+from stackguardian.core.config import settings
+from stackguardian.core.database import get_db, SessionLocal # Assuming get_db will be in database.py
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/users/login") # Adjusted tokenUrl
 
@@ -30,7 +30,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         raise credentials_exception
     return user
 
-from stackguardian.stackguardian.models.user import UserRole
+from stackguardian.models.user import UserRole
 
 def get_current_active_admin_user(current_user: User = Depends(get_current_user)) -> User:
     if current_user.role != UserRole.ADMIN:

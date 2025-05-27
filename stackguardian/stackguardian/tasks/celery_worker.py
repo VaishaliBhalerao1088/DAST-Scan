@@ -1,12 +1,12 @@
 from celery import Celery
-from stackguardian.stackguardian.core.config import settings
+from stackguardian.core.config import settings
 
 # Initialize Celery
 celery_app = Celery(
     "worker",  # Changed from "tasks" to "worker" as per instruction
     broker=settings.CELERY_BROKER_URL,
     backend=settings.CELERY_RESULT_BACKEND,
-    include=['stackguardian.stackguardian.tasks.scan_tasks'] # Added for task discovery
+    include=['stackguardian.tasks.scan_tasks'] # Added for task discovery
 )
 
 # Configure Celery
@@ -22,7 +22,7 @@ celery_app.conf.update(
 # Auto-discover tasks
 # The 'include' parameter in Celery constructor is now the preferred way.
 # If you still want to use autodiscover_tasks, it would look like:
-# celery_app.autodiscover_tasks(["stackguardian.stackguardian.tasks"])
+# celery_app.autodiscover_tasks(["stackguardian.tasks"])
 
 if __name__ == "__main__":
     celery_app.start()

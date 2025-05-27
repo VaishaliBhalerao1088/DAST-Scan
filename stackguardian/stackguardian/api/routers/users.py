@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import timedelta
 
-from stackguardian.stackguardian.core.database import get_db
-from stackguardian.stackguardian.schemas.user import UserCreate, User as UserSchema, Token
-from stackguardian.stackguardian.models.user import User as UserModel
-from stackguardian.stackguardian.core.security import create_access_token, get_password_hash, verify_password
-from stackguardian.stackguardian.api.deps import get_current_user
-from stackguardian.stackguardian.core.config import settings
+from stackguardian.core.database import get_db
+from stackguardian.schemas.user import UserCreate, User as UserSchema, Token
+from stackguardian.models.user import User as UserModel
+from stackguardian.core.security import create_access_token, get_password_hash, verify_password
+from stackguardian.api.deps import get_current_user
+from stackguardian.core.config import settings
 
 router = APIRouter()
 

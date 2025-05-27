@@ -2,17 +2,17 @@ from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List, Optional, Dict, Any
 
-from stackguardian.stackguardian.core.database import get_db
-from stackguardian.stackguardian.models.user import User, UserRole # UserRole needed for future filtering logic
-from stackguardian.stackguardian.models.scan_results import SeverityLevel, ScanType # Enums for query params
-from stackguardian.stackguardian.services.reporting_service import (
+from stackguardian.core.database import get_db
+from stackguardian.models.user import User, UserRole # UserRole needed for future filtering logic
+from stackguardian.models.scan_results import SeverityLevel, ScanType # Enums for query params
+from stackguardian.services.reporting_service import (
     get_recent_scan_runs,
     get_vulnerability_summary_by_target,
     get_overall_vulnerability_summary,
     list_vulnerabilities,
 )
-from stackguardian.stackguardian.api.deps import get_current_user
-from stackguardian.stackguardian.schemas.report import (
+from stackguardian.api.deps import get_current_user
+from stackguardian.schemas.report import (
     ReportScanRun,
     ReportVulnerabilityFinding,
     VulnerabilitySummary,

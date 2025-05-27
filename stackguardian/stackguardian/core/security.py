@@ -11,8 +11,8 @@ def get_password_hash(password: str) -> str:
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
-from stackguardian.stackguardian.schemas.user import TokenData
-from stackguardian.stackguardian.core.config import settings
+from stackguardian.schemas.user import TokenData
+from stackguardian.core.config import settings
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()

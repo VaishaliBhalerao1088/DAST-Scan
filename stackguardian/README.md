@@ -83,21 +83,21 @@ Before you begin, ensure you have the following installed:
     ZAP_BASE_URL="http://localhost:8080"
     # ZAP_API_KEY="your_zap_api_key"
     ```
-    *Note: The application currently loads configuration from `stackguardian.stackguardian.core.config.py` which reads environment variables directly. Support for loading from a `.env` file using a library like `python-dotenv` can be added to `config.py` if desired.*
+    *Note: The application currently loads configuration from `stackguardian.core.config.py` which reads environment variables directly. Support for loading from a `.env` file using a library like `python-dotenv` can be added to `config.py` if desired.*
 
 4.  **Database Setup:**
     The application uses SQLAlchemy and will attempt to create all defined database tables automatically on its first run based on the models. For production environments, it's highly recommended to use a database migration tool like Alembic. (Alembic setup is not yet part of this project).
 
 5.  **Run the FastAPI Application:**
     ```bash
-    uvicorn stackguardian.stackguardian.main:app --reload
+    uvicorn stackguardian.main:app --reload
     ```
     The application will typically be available at `http://localhost:8000`.
 
 6.  **Run the Celery Worker:**
     Ensure your Redis server is running. In a separate terminal, start the Celery worker:
     ```bash
-    celery -A stackguardian.stackguardian.tasks.celery_worker worker -l info -P solo
+    celery -A stackguardian.tasks.celery_worker worker -l info -P solo
     ```
     *Note: The `-P solo` option is recommended for SQLite to avoid concurrency issues. It can be removed if you are using PostgreSQL or another database that handles concurrency well.*
 

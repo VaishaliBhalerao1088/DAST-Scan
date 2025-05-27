@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-from stackguardian.stackguardian.models.user import UserRole
+from stackguardian.models.user import UserRole
 
 class UserBase(BaseModel):
     username: str

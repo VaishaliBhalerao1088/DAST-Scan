@@ -3,14 +3,14 @@ from sqlalchemy import func, case
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 
-from stackguardian.stackguardian.models.scan_results import (
+from stackguardian.models.scan_results import (
     ScanRun, 
     VulnerabilityFinding, 
     SeverityLevel, 
     ScanType, 
     ScanStatus
 )
-from stackguardian.stackguardian.models.user import User # For type hinting if needed, not strictly for query building here
+from stackguardian.models.user import User # For type hinting if needed, not strictly for query building here
 
 
 def get_recent_scan_runs(db: Session, user_id: Optional[int] = None, limit: int = 10) -> List[ScanRun]:

@@ -32,9 +32,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Command to run the Celery worker
-# Ensure stackguardian.stackguardian.tasks.celery_worker is correct
+# Ensure stackguardian.tasks.celery_worker is correct
 # The -P solo is for SQLite, generally not needed for PostgreSQL/Redis in separate containers.
 # Remove -P solo if using PostgreSQL in docker-compose.
-CMD ["celery", "-A", "stackguardian.stackguardian.tasks.celery_worker", "worker", "-l", "info"]
+CMD ["celery", "-A", "stackguardian.tasks.celery_worker", "worker", "-l", "info"]
 # Add "-P", "eventlet" or "gevent" for concurrency in production if I/O bound tasks are many.
 # Default is prefork (multiprocessing).

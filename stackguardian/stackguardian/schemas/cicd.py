@@ -1,9 +1,9 @@
 from pydantic import BaseModel, HttpUrl, Field
 from typing import Optional, Dict, Any, Union
-from stackguardian.stackguardian.models.scan_results import ScanType, SeverityLevel # For ScanType and SeverityLevel enums
-from stackguardian.stackguardian.schemas.scan import ScanTarget # For passive
-from stackguardian.stackguardian.schemas.active_scan import ZapScanConfig, NucleiScanConfig # For active
-from stackguardian.stackguardian.schemas.task import TaskStatus # Base TaskStatus
+from stackguardian.models.scan_results import ScanType, SeverityLevel # For ScanType and SeverityLevel enums
+from stackguardian.schemas.scan import ScanTarget # For passive
+from stackguardian.schemas.active_scan import ZapScanConfig, NucleiScanConfig # For active
+from stackguardian.schemas.task import TaskStatus # Base TaskStatus
 
 class CICDScanTriggerRequest(BaseModel):
     scan_type: ScanType

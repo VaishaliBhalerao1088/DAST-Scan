@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from datetime import datetime
 from typing import Dict, Any
 
-from stackguardian.stackguardian.schemas.scan import ScanTarget
+from stackguardian.schemas.scan import ScanTarget
 
 def get_ssl_tls_info(target: ScanTarget) -> Dict[str, Any]:
     try:
