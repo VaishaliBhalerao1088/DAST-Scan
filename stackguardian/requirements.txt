@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic[email]
+pydantic-settings
+celery
+redis
+python-jose[cryptography]
+passlib[bcrypt]
+requests
+python-owasp-zap-v2.4
